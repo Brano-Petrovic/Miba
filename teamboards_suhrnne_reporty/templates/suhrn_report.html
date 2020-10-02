@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+	<title>Súhrnné reporty</title>
+
+	<!--   G L O B A L S   CSS AND JS FILES, FAVICON, VIEWPORT AND CHARSET   --> 
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+	<link rel="icon" type="image/png" href="http://alpha.miba.com/static/images/logo.gif"/>
+
+	<link rel="stylesheet" href="http://alpha.miba.com/static/css/bootstrap.min.css">
+
+	<script src="http://alpha.miba.com/static/js/jquery.min.js"></script>
+	<script src="http://alpha.miba.com/static/js/popper.min.js"></script>
+	<script src="http://alpha.miba.com/static/js/bootstrap.min.js"></script>
+
+
+	<!--   L O C A L    CSS AND JS FILES   --> 
+	<link rel="stylesheet" href="../static/css/suhrn_report.css">
+
+	<script src="../static/js/teamBoard2.js"></script>
+	<script src="../static/js/suhrn_report.js"></script>
+
+</head>
+
+<body onload="unhide(obdobie.value); kontrola(); mesiac('{{ date1_m }}', 'sel_mesiac_1'); mesiac('{{ date2_m }}', 'sel_mesiac_2'); vyber('{{ vybrate }}')" >
+	<div id="titleDiv" class="mt-3 mb-2">
+		<span id="title">Súhrnné reporty</span>
+	
+	
+    	<img class="img-fluid" src="http://alpha.miba.com/static/images/logo.gif" id="logo" alt="Logo">
+    </div>
+	<form id="formular" action="suhrnny_report" method="post" style="width:504px; float:left; margin-left: 4%;">
+		<div class="object_select" style="margin-left: 5%;"> 
+			PU
+			<select  class="form-control" name="ProdUnit">
+					<option value="PU1">PU1</option>
+					<option value="PU2">PU2</option>
+					<option value="PU3">PU3</option>		
+					<option value="PU4">PU4</option>
+					<option value="FIP">FIP</option>
+					<option selected hidden>{{ PU }}</option>	
+			</select>
+		</div>
+		<div class="object_select">	
+			Obdobie
+			<select class="form-control" name="obdobie"  onchange="unhide(this.value);">
+					<option value="aktualny_mesiac">Od začiatku aktuálneho mesiaca</option>
+					<option value="mesiac">Posledný uzavretý mesiac</option>
+					<option value="kvartal">Posledný uzavretý obchodný kvartál</option>		
+					<option value="polrok">Posledný uzavretý obchodný polrok</option>
+					<option value="rok">Posledný uzavretý obchodný rok</option>
+					<option value="vlastne">Vlastné obdobie</option>
+					<option value="" id="obdobie" selected hidden>&nbsp;</option>	
+			</select>
+		</div>
+		
+		<button id="button1" class="btn btn-primary" type="submit" style="margin-left: 1%; margin-top: 24px;">Zobraziť</button>
+		
+		<div id="vlastne_obdobie" style="clear:both;" hidden>	
+			<div class="object_select" style=" margin-left: 5%;"> 
+				Od (mesiac a rok)style=" margin-left: 5%;"> 
+				Od (mesiac a rok)
+				<select  class="form-control" name="od_mesiac" id="od_mesiac">
+					<option value="1">Január</option>
+					<option value="2">Február</option>
+					<option value="3">Marec</option>
+					<option value="4">Apríl</option>
+					<option value="5">Máj</option>
+					<option value="6">Jún</option>
+					<option value="7">Júl</option>
+					<option value="8">August</option>
+					<option value="9">September</option>
+					<option value="10">Október</option>
+					<option value="11">November</option>
+					<option value="12">December</option>
+					<option value="" id="sel_mesiac_1" selected hidden>&nbsp;</option>
+				</select>
+			</div>
+
+			<div class="object_select" >
+				<input class="form-control input_rok" type="text" name="od_rok" id="od_rok" maxlength="4" value='{{ date1_r }}'>
+			</div>
+
+			<div class="object_select"> 
+				Do (mesiac a rok)
+				<select  class="form-control" name="do_mesiac" id="do_mesiac">
+						<option value="1">Január</option>
+						<option value="2">Február</option>
+						<option value="3">Marec</option>
+						<option value="4">Apríl</option>
+						<option value="5">Máj</option>
+						<option value="6">Jún</option>
+						<option value="7">Júl</option>
+						<option value="8">August</option>
+						<option value="9">September</option>
+						<option value="10">Október</option>
+						<option value="11">November</option>
+						<option value="12">December</option>
+						<option value="" id="sel_mesiac_2" selected hidden>&nbsp;</option>
+					</select>
+			</div>			
+			
+			<div class="object_select">
+				<input class="form-control input_rok" type="text" name="do_rok" id="do_rok" maxlength="4" value='{{ date2_r }}'>
+			</div>
+		</div>
+	</form>		
+	<form action="export" method="get"  style="float:left;">
+		<button id="button2" class="btn btn-primary mt-4" type="submit">Aktualizovať excel</button>
+	</form>	
+
+
+
+
+	<div id="reports" class="container" style="clear:both;">
+		<div class="row">
+			<div id="area1" class="col">
+				<p class="area">{{ pracovisko1 }}</p>
+				<div class="shadow_style mesacneHodnotenieBox">
+					<!--<div class="blueHeaderCell">HODNOTENIE<span id="mesacneHodnotenieMesiac"></span></div>-->
+					<!--<div class="greyHeaderCell">MESAČNÉ PLNENIE [%]</div>-->
+					<table class="background-grey tableMesacneHodnotenie">
+						<tr>
+							<td class="bold mesacneHodnotenieZmena" id = "shift_bar_1">A</td>
+							<td class="tdBar">
+								<div class="meter blue">
+									<span id="mesacneHodnotenie1-A-tab1" ></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie1-A_td-tab1" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena" id = "shift_bar_2">B</td>
+							<td class="tdBar">
+								<div class="meter blue">
+									<span id="mesacneHodnotenie1-B-tab1"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie1-B_td-tab1" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena" id = "shift_bar_3">C</td>
+							<td class="tdBar">
+								<div class="meter blue">
+									<span id="mesacneHodnotenie1-C-tab1"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie1-C_td-tab1" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena" id = "shift_bar_4">D</td>
+							<td class="tdBar">
+								<div class="meter blue">
+									<span id="mesacneHodnotenie1-D-tab1"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie1-D_td-tab1" class="percentage">N/A%</td>
+						</tr>
+		<!-- ********************************************************************************************************** -->
+						<tr>
+							<td class="bold mesacneHodnotenieZmena" id = "shift_bar_5">A</td>
+							<td class="tdBar">
+								<div class="meter yellow">
+									<span id="mesacneHodnotenie2-A-tab1"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie2-A_td-tab1" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena" id = "shift_bar_6">B</td>
+							<td class="tdBar">
+								<div class="meter yellow">
+									<span id="mesacneHodnotenie2-B-tab1"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie2-B_td-tab1" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena" id = "shift_bar_7">C</td>
+							<td class="tdBar">
+								<div class="meter yellow">
+									<span id="mesacneHodnotenie2-C-tab1"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie2-C_td-tab1" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena" id = "shift_bar_8">D</td>
+							<td class="tdBar">
+								<div class="meter yellow">
+									<span id="mesacneHodnotenie2-D-tab1"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie2-D_td-tab1" class="percentage">N/A%</td>
+						</tr>
+		<!-- ********************************************************************************************************** -->
+						<tr>
+							<td class="bold mesacneHodnotenieZmena" id = "shift_bar_9">A</td>
+							<td class="tdBar">
+								<div class="meter green">
+									<span id="mesacneHodnotenie3-A-tab1"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie3-A_td-tab1" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena" id = "shift_bar_10">B</td>
+							<td class="tdBar">
+								<div class="meter green">
+									<span id="mesacneHodnotenie3-B-tab1"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie3-B_td-tab1" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena" id = "shift_bar_11">C</td>
+							<td class="tdBar">
+								<div class="meter green">
+									<span id="mesacneHodnotenie3-C-tab1"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie3-C_td-tab1" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena" id = "shift_bar_12">D</td>
+							<td class="tdBar">
+								<div class="meter green">
+									<span id="mesacneHodnotenie3-D-tab1"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie3-D_td-tab1" class="percentage">N/A%</td>
+						</tr>
+		<!-- ********************************************************************************************************** -->
+						<tr>
+							<td class="bold mesacneHodnotenieZmena" id = "shift_bar_13">A</td>
+							<td class="tdBar">
+								<div class="meter pink">
+									<span id="mesacneHodnotenie4-A-tab1"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie4-A_td-tab1" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena" id = "shift_bar_14">B</td>
+							<td class="tdBar">
+								<div class="meter pink">
+									<span id="mesacneHodnotenie4-B-tab1"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie4-B_td-tab1" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena" id = "shift_bar_15">C</td>
+							<td class="tdBar">
+								<div class="meter pink">
+									<span id="mesacneHodnotenie4-C-tab1"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie4-C_td-tab1" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena" id = "shift_bar_16">D</td>
+							<td class="tdBar">
+								<div class="meter pink">
+									<span id="mesacneHodnotenie4-D-tab1"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie4-D_td-tab1" class="percentage">N/A%</td>
+						</tr>
+		<!-- ********************************************************************************************************** -->
+						<tr>
+							<td class="bold mesacneHodnotenieZmena" id = "shift_bar_17">A</td>
+							<td class="tdBar">
+								<div class="meter darkBlue">
+									<span id="mesacneHodnotenie5-A-tab1"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie5-A_td-tab1" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena" id = "shift_bar_18">B</td>
+							<td class="tdBar">
+								<div class="meter darkBlue">
+									<span id="mesacneHodnotenie5-B-tab1"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie5-B_td-tab1" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena" id = "shift_bar_19">C</td>
+							<td class="tdBar">
+								<div class="meter darkBlue">
+									<span id="mesacneHodnotenie5-C-tab1"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie5-C_td-tab1" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena" id = "shift_bar_20">D</td>
+							<td class="tdBar">
+								<div class="meter darkBlue">
+									<span id="mesacneHodnotenie5-D-tab1"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie5-D_td-tab1" class="percentage">N/A%</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<div id="area2" class="col">
+				<p class="area">{{ pracovisko2 }}</p>
+				<div class="shadow_style mesacneHodnotenieBox">
+
+
+					<table class="background-grey tableMesacneHodnotenie">
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">A</td>
+							<td class="tdBar">
+								<div class="meter blue">
+									<span id="mesacneHodnotenie1-A-tab2"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie1-A_td-tab2" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">B</td>
+							<td class="tdBar">
+								<div class="meter blue">
+									<span id="mesacneHodnotenie1-B-tab2"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie1-B_td-tab2" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">C</td>
+							<td class="tdBar">
+								<div class="meter blue">
+									<span id="mesacneHodnotenie1-C-tab2"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie1-C_td-tab2" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">D</td>
+							<td class="tdBar">
+								<div class="meter blue">
+									<span id="mesacneHodnotenie1-D-tab2"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie1-D_td-tab2" class="percentage">N/A%</td>
+						</tr>
+		<!-- ********************************************************************************************************** -->
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">A</td>
+							<td class="tdBar">
+								<div class="meter yellow">
+									<span id="mesacneHodnotenie2-A-tab2"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie2-A_td-tab2" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">B</td>
+							<td class="tdBar">
+								<div class="meter yellow">
+									<span id="mesacneHodnotenie2-B-tab2"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie2-B_td-tab2" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">C</td>
+							<td class="tdBar">
+								<div class="meter yellow">
+									<span id="mesacneHodnotenie2-C-tab2"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie2-C_td-tab2" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">D</td>
+							<td class="tdBar">
+								<div class="meter yellow">
+									<span id="mesacneHodnotenie2-D-tab2"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie2-D_td-tab2" class="percentage">N/A%</td>
+						</tr>
+		<!-- ********************************************************************************************************** -->
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">A</td>
+							<td class="tdBar">
+								<div class="meter green">
+									<span id="mesacneHodnotenie3-A-tab2"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie3-A_td-tab2" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">B</td>
+							<td class="tdBar">
+								<div class="meter green">
+									<span id="mesacneHodnotenie3-B-tab2"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie3-B_td-tab2" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">C</td>
+							<td class="tdBar">
+								<div class="meter green">
+									<span id="mesacneHodnotenie3-C-tab2"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie3-C_td-tab2" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">D</td>
+							<td class="tdBar">
+								<div class="meter green">
+									<span id="mesacneHodnotenie3-D-tab2"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie3-D_td-tab2" class="percentage">N/A%</td>
+						</tr>
+		<!-- ********************************************************************************************************** -->
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">A</td>
+							<td class="tdBar">
+								<div class="meter pink">
+									<span id="mesacneHodnotenie4-A-tab2"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie4-A_td-tab2" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">B</td>
+							<td class="tdBar">
+								<div class="meter pink">
+									<span id="mesacneHodnotenie4-B-tab2"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie4-B_td-tab2" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">C</td>
+							<td class="tdBar">
+								<div class="meter pink">
+									<span id="mesacneHodnotenie4-C-tab2"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie4-C_td-tab2" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">D</td>
+							<td class="tdBar">
+								<div class="meter pink">
+									<span id="mesacneHodnotenie4-D-tab2"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie4-D_td-tab2" class="percentage">N/A%</td>
+						</tr>
+		<!-- ********************************************************************************************************** -->
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">A</td>
+							<td class="tdBar">
+								<div class="meter darkBlue">
+									<span id="mesacneHodnotenie5-A-tab2"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie5-A_td-tab2" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">B</td>
+							<td class="tdBar">
+								<div class="meter darkBlue">
+									<span id="mesacneHodnotenie5-B-tab2"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie5-B_td-tab2" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">C</td>
+							<td class="tdBar">
+								<div class="meter darkBlue">
+									<span id="mesacneHodnotenie5-C-tab2"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie5-C_td-tab2" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">D</td>
+							<td class="tdBar">
+								<div class="meter darkBlue">
+									<span id="mesacneHodnotenie5-D-tab2"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie5-D_td-tab2" class="percentage">N/A%</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<div id="area3" class="col">
+					<p class="area">{{ pracovisko3 }}</p>
+				<div class="shadow_style mesacneHodnotenieBox">
+
+
+					<table class="background-grey tableMesacneHodnotenie">
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">A</td>
+							<td class="tdBar">
+								<div class="meter blue">
+									<span id="mesacneHodnotenie1-A-tab3"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie1-A_td-tab3" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">B</td>
+							<td class="tdBar">
+								<div class="meter blue">
+									<span id="mesacneHodnotenie1-B-tab3"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie1-B_td-tab3" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">C</td>
+							<td class="tdBar">
+								<div class="meter blue">
+									<span id="mesacneHodnotenie1-C-tab3"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie1-C_td-tab3" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">D</td>
+							<td class="tdBar">
+								<div class="meter blue">
+									<span id="mesacneHodnotenie1-D-tab3"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie1-D_td-tab3" class="percentage">N/A%</td>
+						</tr>
+		<!-- ********************************************************************************************************** -->
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">A</td>
+							<td class="tdBar">
+								<div class="meter yellow">
+									<span id="mesacneHodnotenie2-A-tab3"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie2-A_td-tab3" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">B</td>
+							<td class="tdBar">
+								<div class="meter yellow">
+									<span id="mesacneHodnotenie2-B-tab3"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie2-B_td-tab3" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">C</td>
+							<td class="tdBar">
+								<div class="meter yellow">
+									<span id="mesacneHodnotenie2-C-tab3"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie2-C_td-tab3" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">D</td>
+							<td class="tdBar">
+								<div class="meter yellow">
+									<span id="mesacneHodnotenie2-D-tab3"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie2-D_td-tab3" class="percentage">N/A%</td>
+						</tr>
+		<!-- ********************************************************************************************************** -->
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">A</td>
+							<td class="tdBar">
+								<div class="meter green">
+									<span id="mesacneHodnotenie3-A-tab3"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie3-A_td-tab3" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">B</td>
+							<td class="tdBar">
+								<div class="meter green">
+									<span id="mesacneHodnotenie3-B-tab3"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie3-B_td-tab3" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">C</td>
+							<td class="tdBar">
+								<div class="meter green">
+									<span id="mesacneHodnotenie3-C-tab3"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie3-C_td-tab3" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">D</td>
+							<td class="tdBar">
+								<div class="meter green">
+									<span id="mesacneHodnotenie3-D-tab3"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie3-D_td-tab3" class="percentage">N/A%</td>
+						</tr>
+		<!-- ********************************************************************************************************** -->
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">A</td>
+							<td class="tdBar">
+								<div class="meter pink">
+									<span id="mesacneHodnotenie4-A-tab3"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie4-A_td-tab3" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">B</td>
+							<td class="tdBar">
+								<div class="meter pink">
+									<span id="mesacneHodnotenie4-B-tab3"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie4-B_td-tab3" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">C</td>
+							<td class="tdBar">
+								<div class="meter pink">
+									<span id="mesacneHodnotenie4-C-tab3"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie4-C_td-tab3" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">D</td>
+							<td class="tdBar">
+								<div class="meter pink">
+									<span id="mesacneHodnotenie4-D-tab3"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie4-D_td-tab3" class="percentage">N/A%</td>
+						</tr>
+		<!-- ********************************************************************************************************** -->
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">A</td>
+							<td class="tdBar">
+								<div class="meter darkBlue">
+									<span id="mesacneHodnotenie5-A-tab3"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie5-A_td-tab3" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">B</td>
+							<td class="tdBar">
+								<div class="meter darkBlue">
+									<span id="mesacneHodnotenie5-B-tab3"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie5-B_td-tab3" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">C</td>
+							<td class="tdBar">
+								<div class="meter darkBlue">
+									<span id="mesacneHodnotenie5-C-tab3"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie5-C_td-tab3" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">D</td>
+							<td class="tdBar">
+								<div class="meter darkBlue">
+									<span id="mesacneHodnotenie5-D-tab3"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie5-D_td-tab3" class="percentage">N/A%</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<div id="area4" class="col">
+				<p class="area">{{ pracovisko4 }}</p>
+				<div class="shadow_style mesacneHodnotenieBox">
+
+					
+					<table class="background-grey tableMesacneHodnotenie">
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">A</td>
+							<td class="tdBar">
+								<div class="meter blue">
+									<span id="mesacneHodnotenie1-A-tab4"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie1-A_td-tab4" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">B</td>
+							<td class="tdBar">
+								<div class="meter blue">
+									<span id="mesacneHodnotenie1-B-tab4"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie1-B_td-tab4" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">C</td>
+							<td class="tdBar">
+								<div class="meter blue">
+									<span id="mesacneHodnotenie1-C-tab4"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie1-C_td-tab4" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">D</td>
+							<td class="tdBar">
+								<div class="meter blue">
+									<span id="mesacneHodnotenie1-D-tab4"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie1-D_td-tab4" class="percentage">N/A%</td>
+						</tr>
+		<!-- ********************************************************************************************************** -->
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">A</td>
+							<td class="tdBar">
+								<div class="meter yellow">
+									<span id="mesacneHodnotenie2-A-tab4"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie2-A_td-tab4" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">B</td>
+							<td class="tdBar">
+								<div class="meter yellow">
+									<span id="mesacneHodnotenie2-B-tab4"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie2-B_td-tab4" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">C</td>
+							<td class="tdBar">
+								<div class="meter yellow">
+									<span id="mesacneHodnotenie2-C-tab4"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie2-C_td-tab4" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">D</td>
+							<td class="tdBar">
+								<div class="meter yellow">
+									<span id="mesacneHodnotenie2-D-tab4"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie2-D_td-tab4" class="percentage">N/A%</td>
+						</tr>
+		<!-- ********************************************************************************************************** -->
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">A</td>
+							<td class="tdBar">
+								<div class="meter green">
+									<span id="mesacneHodnotenie3-A-tab4"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie3-A_td-tab4" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">B</td>
+							<td class="tdBar">
+								<div class="meter green">
+									<span id="mesacneHodnotenie3-B-tab4"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie3-B_td-tab4" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">C</td>
+							<td class="tdBar">
+								<div class="meter green">
+									<span id="mesacneHodnotenie3-C-tab4"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie3-C_td-tab4" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">D</td>
+							<td class="tdBar">
+								<div class="meter green">
+									<span id="mesacneHodnotenie3-D-tab4"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie3-D_td-tab4" class="percentage">N/A%</td>
+						</tr>
+		<!-- ********************************************************************************************************** -->
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">A</td>
+							<td class="tdBar">
+								<div class="meter pink">
+									<span id="mesacneHodnotenie4-A-tab4"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie4-A_td-tab4" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">B</td>
+							<td class="tdBar">
+								<div class="meter pink">
+									<span id="mesacneHodnotenie4-B-tab4"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie4-B_td-tab4" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">C</td>
+							<td class="tdBar">
+								<div class="meter pink">
+									<span id="mesacneHodnotenie4-C-tab4"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie4-C_td-tab4" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">D</td>
+							<td class="tdBar">
+								<div class="meter pink">
+									<span id="mesacneHodnotenie4-D-tab4"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie4-D_td-tab4" class="percentage">N/A%</td>
+						</tr>
+		<!-- ********************************************************************************************************** -->
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">A</td>
+							<td class="tdBar">
+								<div class="meter darkBlue">
+									<span id="mesacneHodnotenie5-A-tab4"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie5-A_td-tab4" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">B</td>
+							<td class="tdBar">
+								<div class="meter darkBlue">
+									<span id="mesacneHodnotenie5-B-tab4"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie5-B_td-tab4" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">C</td>
+							<td class="tdBar">
+								<div class="meter darkBlue">
+									<span id="mesacneHodnotenie5-C-tab4"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie5-C_td-tab4" class="percentage">N/A%</td>
+						</tr>
+		
+						<tr>
+							<td class="bold mesacneHodnotenieZmena">D</td>
+							<td class="tdBar">
+								<div class="meter darkBlue">
+									<span id="mesacneHodnotenie5-D-tab4"></span>
+								</div>
+							</td>
+							<td id="mesacneHodnotenie5-D_td-tab4" class="percentage">N/A%</td>
+						</tr>
+					</table>
+				</div>
+			</div><br>
+		</div>	
+<!-- Brano -->
+		
+
+		<div class="row mt-3">
+			<div class="col">
+				<div class="legenda_stvorcek legenda_blue" style="margin-left:0px;"></div><div class="legenda_text">Kvalita</div>
+				<div class="legenda_stvorcek legenda_yellow"></div><div class="legenda_text">Výkony</div>
+				<div class="legenda_stvorcek legenda_green"></div><div class="legenda_text">EHS</div>
+				<div class="legenda_stvorcek legenda_pink"></div><div class="legenda_text">5S + AU</div>
+				<div class="legenda_stvorcek legenda_darkblue"></div><div class="legenda_text">Dochádzka</div>
+			</div>
+		</div>	
+			
+		<p  class="area mt-5">Layered Process Audits</p>
+		<div class="row">
+			<div id="area5" class="col">
+				<div class="shadow_style mesacneHodnotenieBox">
+					<table class="tab_audit">
+						<tr>
+							<td class="tab_audit_popis"></td>
+							<td class="tab_audit_status bold">Status</td>
+							<td class="tab_audit_datum bold">
+								Nevykonané audity
+							</td>
+						</tr>
+						<tr id="tab_audit_riadok1">
+							<td class="tab_audit_popis bold" id="prac_pozicia_1">Majstri (LPA1)</td>
+							<td class="tab_audit_status"><div id="majstri_1" class="circle"><script>farba('{{majstri_1}}', "majstri_1")</script></div></td>
+							<td class="tab_audit_datum">
+								{% for row in majstri_1 %}							
+									{% for d in row %}
+										{{ d }}
+									{% endfor %}<br>								
+								{% endfor %}
+							</td>
+						</tr>
+					</table>						
+				</div>
+			</div>
+
+			
+			
+			<div id="area6" class="col">
+				<div class="shadow_style mesacneHodnotenieBox">
+					<table class="tab_audit">
+						<tr>
+							<td class="tab_audit_popis"></td>
+							<td class="tab_audit_status bold">Status</td>
+							<td class="tab_audit_datum bold">
+								Nevykonané audity
+							</td>
+						</tr>
+						<tr>
+							<td class="tab_audit_popis bold">Majstri (LPA1)</td>
+							<td class="tab_audit_status"><div id="majstri_2" class="circle"><script>farba('{{majstri_2}}', "majstri_2")</script></div></td>
+							<td class="tab_audit_datum">
+								{% for row in majstri_2 %}							
+									{% for d in row %}
+										{{ d }}
+									{% endfor %}<br>								
+								{% endfor %}
+							</td>
+						</tr>
+					</table>				
+				</div>
+			</div>
+
+			<div id="area7" class="col">
+				<div class="shadow_style mesacneHodnotenieBox">
+					<table class="tab_audit">
+						<tr>
+							<td class="tab_audit_popis"></td>
+							<td class="tab_audit_status bold">Status</td>
+							<td class="tab_audit_datum bold">
+								Nevykonané audity
+							</td>
+						</tr>
+						<tr>
+							<td class="tab_audit_popis bold">Majstri (LPA1)</td>
+							<td class="tab_audit_status"><div id="majstri_3" class="circle"><script>farba('{{majstri_3}}', "majstri_3")</script></div></td>
+							<td class="tab_audit_datum">
+								{% for row in majstri_3 %}							
+									{% for d in row %}
+										{{ d }}
+									{% endfor %}<br>								
+								{% endfor %}
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<div id="area8" class="col">
+				<div class="shadow_style mesacneHodnotenieBox">
+					<table class="tab_audit">
+						<tr>
+							<td class="tab_audit_popis"></td>
+							<td class="tab_audit_status bold">Status</td>
+							<td class="tab_audit_datum bold">
+								Nevykonané audity
+							</td>
+						</tr>
+						<tr>
+							<td class="tab_audit_popis bold">Majstri (LPA1)</td>
+							<td class="tab_audit_status"><div id="majstri_4" class="circle"><script>farba('{{majstri_4}}', "majstri_4")</script></div></td>
+							<td class="tab_audit_datum">
+								{% for row in majstri_4 %}							
+									{% for d in row %}
+										{{ d }}
+									{% endfor %}<br>								
+								{% endfor %}
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div id="area9" class="col">
+				<div class="mesacneHodnotenieBox shadow_style">
+					<table class="tab_audit">
+						<tr>
+							<td id="tab_audit_popis1" class="tab_audit_popisPU1"></td>
+							<td id="tab_audit_status1" class="tab_audit_statusPU1 bold">Status</td>
+							<td id="tab_audit_datum1" class="tab_audit_datumPU1 bold" style="font-weight: bold;">Nevykonané audity</td>
+						</tr>
+						<tr id="tab_audit_riadok2">
+							<td class="auditor tab_audit_popisPU1 bold">PK (LPA2)</td>
+							<td class="status tab_audit_statusPU1"><div id="koordinatori_1" class="circle"><script>farba('{{koordinatori_1}}', "koordinatori_1")</script></div></td>
+							<td class="datum tab_audit_datumPU1">
+								{% for row in koordinatori_1 %}							
+									{% for d in row %}
+										{{ d }}
+									{% endfor %}<br>								
+								{% endfor %}
+							</td>
+						</tr>
+						<tr id="tab_audit_riadok3">
+							<td class="auditor tab_audit_popisPU1 bold">PUL (LPA3)</td>
+							<td class="status tab_audit_statusPU1"><div id="PUL_1" class="circle"><script>farba('{{PUL_1}}', "PUL_1")</script></div></td>
+							<td class="datum tab_audit_datumPU1">
+								{% for row in PUL_1 %}							
+									{% for d in row %}
+										{{ d }}
+									{% endfor %}<br>								
+								{% endfor %}
+							</td>
+						</tr>
+						<tr>
+							<td class="auditor tab_audit_popisPU1 bold">EHS (LPA4)</td>
+							<td class="status tab_audit_statusPU1"><div id="EHSmanager_1" class="circle"><script>farba('{{EHSmanager_1}}', "EHSmanager_1")</script></div></td>
+							<td class="datum tab_audit_datumPU1">
+								{% for row in EHSmanager_1 %}							
+									{% for d in row %}
+										{{ d }}
+									{% endfor %}<br>								
+								{% endfor %}
+							</td>
+						</tr>
+						<tr>
+							<td class="auditor tab_audit_popisPU1 bold">PM (LPA4)</td>
+							<td class="status tab_audit_statusPU1"><div id="Pmanager_1" class="circle"><script>farba('{{Pmanager_1}}', "Pmanager_1")</script></div></td>
+							<td class="datum tab_audit_datumPU1">
+								{% for row in Pmanager_1 %}							
+									{% for d in row %}
+										{{ d }}
+									{% endfor %}<br>								
+								{% endfor %}
+							</td>
+						</tr>
+						<tr>
+							<td class="auditor tab_audit_popisPU1 bold">QM (LPA4)</td>
+							<td class="status tab_audit_statusPU1"><div id="Qmanager_1" class="circle"><script>farba('{{Qmanager_1}}', "Qmanager_1")</script></div></td>
+							<td class="datum tab_audit_datumPU1">
+								{% for row in Qmanager_1 %}							
+									{% for d in row %}
+										{{ d }}
+									{% endfor %}<br>								
+								{% endfor %}
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+	
+	zobrazenie('{{ PU }}');
+
+	transfer(JSON.parse({{ hodnotenie_tab1|tojson|safe }}),1);
+	transfer(JSON.parse({{ hodnotenie_tab2|tojson|safe }}),2);
+	transfer(JSON.parse({{ hodnotenie_tab3|tojson|safe }}),3);
+	transfer(JSON.parse({{ hodnotenie_tab4|tojson|safe }}),4);
+
+	</script>
+
+</body>
+</html>

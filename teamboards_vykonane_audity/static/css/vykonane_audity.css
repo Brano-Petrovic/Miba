@@ -1,0 +1,102 @@
+body {
+	width: 80%;
+	margin: auto;
+}
+
+#miba {
+	border-radius: 4px;
+	font-size: 40px;
+	text-align: left;
+	margin: auto;
+	margin-top: 40px;
+	margin-bottom: 20px;
+	width: 100%;
+	padding-bottom: 25px;
+}
+
+#logo {
+	width: 110px;
+	height: 72px;
+	float: right;
+	position: relative;
+}
+
+.object_select{
+	width: auto; 
+	min-width: 65px;
+	max-width: 301px;
+	float: left; 
+	margin-left: 1%;
+	padding-bottom: 13px;
+}
+
+.input_rok{
+	margin-top:24px; 
+	width: 65px;
+}
+
+#formular{
+	margin-top: 200px;
+	width:100%; 
+	margin:auto;
+	display: block;
+}
+
+.div_graf {
+	width:100%;
+	height: 500px;
+	text-align: center;
+	/* float: right; */
+	/* border: 2px solid gray;
+	border-radius: 5px;
+	background-color: rgb(206, 206, 206);
+	padding: 10px; */
+}
+
+.div_meter {
+	height: 380px;
+	text-align: center;
+}
+
+#chart-container{
+	width: 100%; 
+	height: 100%;
+   }
+
+#cvs {
+	margin-left: 180px;
+	pointer-events: none;
+
+}
+
+#bar-chart{
+	height: 100%;
+	 padding-bottom: 55px;
+}
+
+.divObjects {
+	border-style: solid;
+	border-color: black;
+	border-width: 1px;
+	box-shadow: 2px 3px 8px #000000;
+	padding: 1rem;
+}
+
+ @media screen and (max-width: 1000px) {
+	#cvs {
+		margin-left: 0;
+	}
+
+	body{
+		width: 90%;
+	}
+  } 
+
+h4{
+	display: inline-block;
+}
+
+#poznamka {
+	color:rgb(192,0,0);
+}
+

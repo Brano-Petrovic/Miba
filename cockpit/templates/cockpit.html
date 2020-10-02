@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+	<title>Cockpit</title>
+
+	<!--   G L O B A L S   CSS AND JS FILES, FAVICON, VIEWPORT AND CHARSET   --> 
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+	<link rel="icon" type="image/png" href="static/images/logo.gif"/>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+	<!--   L O C A L    CSS AND JS FILES   --> 
+	<link rel="stylesheet" href="../static/css/cockpit.css">
+
+</head>
+
+<body>
+	<div id="miba" class="alert alert-primary">
+		<span id="mibaSinterSlovakia">Miba Sinter Slovakia</span>
+		<img src="static/images/logo.gif" alt="logo" id="logo">
+	</div>
+
+
+<div class="okraje">
+	<div id="zoznam-data" class="divObjects">	
+		<h5>Zber dát</h5>
+		<a class="btn btn-primary StyleButtons" target="_blank" href="localhost:5000/">Audity majstri</a><br>
+		<a class="btn disabled StyleButtons" target="_blank" href="localhost:5001/">Audity planneri</a><br>
+		<a class="btn disabled StyleButtons" href="#">Audity TPM</a><br>
+		<a class="btn disabled StyleButtons" href="#">Audity Intralogistics</a>
+	</div>
+
+
+
+
+	<div id="zoznam-reports" class="divObjects">
+		<h5>Reporty</h5>
+		<div class="dropdown">
+			<a class="btn btn-primary StyleButtons">PU1</a>
+			<div class="dropdown-content">
+				<a target="_blank" href="localhost:5050/pu1/lisovanie">Lisovanie</a>
+				<a target="_blank" href="localhost:5050/pu1/tepelne_opracovanie">Tepelné opracovanie</a>
+				<a target="_blank" href="localhost:5050/pu1/kalibrovanie">Kalibrovanie</a>
+			</div>
+		</div><br>
+		
+		<div class="dropdown">
+			<a class="btn btn-primary StyleButtons">PU2</a>
+			<div class="dropdown-content">
+				<a target="_blank" href="localhost:5050/pu2/lisovanie">Lisovanie</a>
+				<a target="_blank" href="localhost:5050/pu2/tepelne_opracovanie">Tepelné opracovanie</a>
+				<a target="_blank" href="localhost:5050/pu2/kalibrovanie">Kalibrovanie</a>
+				<a target="_blank" href="localhost:5050/pu2/mechanicke_opracovanie">Mechanické opracovanie</a>
+			</div>
+		</div><br>
+		
+		<div class="dropdown">
+			<a class="btn btn-primary StyleButtons">PU3</a>
+			<div class="dropdown-content">
+				<a target="_blank" href="localhost:5050/pu3/mechanicke_opracovanie1">Mechanické opracovanie 1</a>
+				<a target="_blank" href="localhost:5050/pu3/mechanicke_opracovanie2">Mechanické opracovanie 2</a>
+			</div>
+		</div><br>
+		
+		<div class="dropdown">
+			<a class="btn btn-primary StyleButtons">PU4</a>
+			<div class="dropdown-content">
+				<a target="_blank" href="localhost:5050/pu4/cela_jednotka">Celá jednotka</a>
+			</div>
+		</div><br>	
+		
+		<div class="dropdown">
+			<a class="btn btn-primary StyleButtons">FIP</a>
+			<div class="dropdown-content">
+				<a target="_blank" href="localhost:5050/fip1/konecna_kontrola_a_balenie_pu1">Konečná kontrola a balenie PU1</a>
+				<a target="_blank" href="localhost:5050/fip2/konecna_kontrola_a_balenie_pu2">Konečná kontrola a balenie PU2</a>
+			</div>
+		</div><br>
+		
+		<a class="btn btn-primary StyleButtons" target="_blank" href="localhost:5080">História</a><br>
+<!--		<a class="btn disabled StyleButtons" target="_blank" href="#">History</a><br>-->
+		<a class="btn btn-primary StyleButtons" target="_blank" href="localhost:5091/">Vykonané audity</a><br>	
+
+	</div>
+
+
+	
+
+	<div id="zoznam-kaizen" class="divObjects">	
+		<h5>Kaizen</h5>
+		<div class="dropdown">
+			<a class="btn btn-primary StyleButtons">PU1</a>
+			<div class="dropdown-content">
+				<a target="_blank" href="localhost:5210/pu1/lisovanie">Lisovanie</a>
+				<a target="_blank" href="localhost:5210/pu1/tepelne_opracovanie">Tepelné opracovanie</a>
+				<a target="_blank" href="localhost:5210/pu1/kalibrovanie">Kalibrovanie</a>
+			</div>
+		</div><br>
+		
+		<div class="dropdown">
+			<a class="btn btn-primary StyleButtons">PU2</a>
+			<div class="dropdown-content">
+				<a target="_blank" href="localhost:5210/pu2/lisovanie">Lisovanie</a>
+				<a target="_blank" href="localhost:5210/pu2/tepelne_opracovanie">Tepelné opracovanie</a>
+				<a target="_blank" href="localhost:5210/pu2/kalibrovanie">Kalibrovanie</a>
+				<a target="_blank" href="localhost:5210/pu2/mechanicke_opracovanie">Mechanické opracovanie</a>
+			</div>
+		</div><br>
+		
+		<div class="dropdown">
+			<a class="btn btn-primary StyleButtons">PU3</a>
+			<div class="dropdown-content">
+				<a target="_blank" href="localhost:5210/pu3/mechanicke_opracovanie1">Mechanické opracovanie 1</a>
+				<a target="_blank" href="localhost:5210/pu3/mechanicke_opracovanie2">Mechanické opracovanie 2</a>
+			</div>
+		</div><br>
+		
+		<div class="dropdown">
+			<a class="btn btn-primary StyleButtons">PU4</a>
+			<div class="dropdown-content">
+				<a target="_blank" href="localhost:5210/pu4/cela_jednotka">Celá jednotka</a>
+			</div>
+		</div><br>	
+		
+		<div class="dropdown">
+			<a class="btn btn-primary StyleButtons">FIP</a>
+			<div class="dropdown-content">
+				<a target="_blank" href="localhost:5210/fip1/konecna_kontrola_a_balenie_pu1">Konečná kontrola a balenie PU1</a>
+				<a target="_blank" href="localhost:5210/fip2/konecna_kontrola_a_balenie_pu2">Konečná kontrola a balenie PU2</a>
+			</div>
+		</div><br>			
+	
+		<a class="btn btn-primary StyleButtons" target="_blank" href="localhost:5090">História</a><br>
+	</div><br>
+
+	
+
+
+
+	<div id="zoznam-big_picture" class="divObjects">	
+		<h5>Big picture</h5>
+		<a class="btn btn-primary StyleButtons" target="_blank" href="localhost:5100">Mozaika</a><br>	
+	</div>
+</div>	
+</body>
+</html>

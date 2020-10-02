@@ -1,0 +1,139 @@
+.menu {
+  --menu-height: 40px;
+  box-sizing: border-box;
+  position: relative;
+  top: -20px;																/* offset zhora pre hlavne menu */
+  left: 19.73%;																/* lavy offset hlavneho menu */
+/*  width: 100vw;*/
+  width: 60.50%;															/* sirka hlavneho menu */
+}
+
+.menu ul {
+  list-style: none;
+  padding: 16px;
+  margin: 0;
+}
+
+.menu ul li, .menu ul li a {
+/*  opacity: .8;*/															/* toto je aby nebolo pismo vyplznute */
+/*  color: #ffffff;*/
+  color: #000000;
+  cursor: pointer;
+  transition: 200ms;
+  text-decoration: none;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+.menu ul li:hover, .menu ul li a:hover {
+  opacity: 1;
+}
+
+.menu ul li a, .menu ul li a a {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.menu ul li {
+  padding-right: 36px;
+}
+
+.menu ul li::before {
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+/*  border-top: 5px solid #FFA500;													/* toto je farba hlavneho zobacika v hlavnom menu */
+  border-top: 5px solid #000000;													/* toto je farba hlavneho zobacika v hlavnom menu */
+
+  position: absolute;
+/*  right: 8px;																/* toto je offset medzi zobacikom a menu itemom */
+  right: 20px;
+
+/*  top: 50%;*/																/* toto je vyska zobaciku v hlavnom menu */
+  top: 40%;
+/*  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);*/
+}
+
+.menu ul .link::before {
+  padding-right: 0;
+  display: none;
+}
+
+.menu > ul {
+  display: flex;
+  height: var(--menu-height);
+  align-items: center;
+/*  background-color: #ff0000;*/
+  background-color: #cce5ff;														/* toto je farba pozadia hlavneho menu */
+}
+
+.menu > ul li {
+  position: relative;
+  margin: 0 8px;
+}
+
+.menu > ul li ul {
+  visibility: hidden;
+  opacity: 0;
+  padding: 0;
+  min-width: 160px;
+/*  background-color: #333;*/
+  background-color: #cce5ff;														/* toto je farba pozadia roletiek */
+  position: absolute;
+  top: calc(var(--menu-height) - 7px);
+/*  left: 50%;*/
+  left: 72px;																/* toto je posun celeho menu zlava */
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+/*  transition: 200ms;
+  transition-delay: 200ms;*/
+}
+
+.menu > ul li ul li {
+  margin: 0;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 30px;
+  padding-right: 40px;
+}
+
+
+.menu > ul li ul li::before {
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid #FFA500;													/* toto je farba zobacika v roletkach */
+/*  border-left: 5px solid #cce5ff;													/* toto je farba zobacika v roletkach */
+
+}
+
+.menu > ul li ul li ul {
+  top: -0%;
+  left: 100.5%;																/* toto je medzera medzi roletkami */
+  -webkit-transform: translate(0);
+          transform: translate(0);
+}
+
+.menu > ul li ul li:hover {
+/*  background-color: #0000ff;*/
+/*  background-color: #cce500;														/* toto farba hoveru, ked idem mysou po itemoch */
+/*  background-color: #f3af03;														/* toto farba hoveru, ked idem mysou po itemoch */
+  background-color: #ffa500;														/* toto farba hoveru, ked idem mysou po itemoch */
+
+/*  background-color: #0000ff;*/
+
+}
+
+.menu > ul li:hover > ul {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0ms;
+}
